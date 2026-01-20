@@ -1,0 +1,33 @@
+export const COUNTRIES = [
+  { name: 'United States', dial: '+1' },
+  { name: 'United Kingdom', dial: '+44' },
+  { name: 'Canada', dial: '+1' },
+  { name: 'Australia', dial: '+61' },
+  { name: 'Germany', dial: '+49' },
+  { name: 'France', dial: '+33' },
+  { name: 'Spain', dial: '+34' },
+  { name: 'Italy', dial: '+39' },
+  { name: 'Netherlands', dial: '+31' },
+  { name: 'Sweden', dial: '+46' },
+  { name: 'Norway', dial: '+47' },
+  { name: 'Denmark', dial: '+45' },
+  { name: 'India', dial: '+91' },
+  { name: 'Pakistan', dial: '+92' },
+  { name: 'Bangladesh', dial: '+880' },
+  { name: 'Japan', dial: '+81' },
+  { name: 'South Korea', dial: '+82' },
+  { name: 'China', dial: '+86' },
+  { name: 'Brazil', dial: '+55' },
+  { name: 'Mexico', dial: '+52' },
+  { name: 'Argentina', dial: '+54' },
+  { name: 'South Africa', dial: '+27' },
+  { name: 'Nigeria', dial: '+234' },
+  { name: 'Egypt', dial: '+20' },
+  { name: 'Turkey', dial: '+90' },
+  { name: 'Poland', dial: '+48' },
+  { name: 'Portugal', dial: '+351' },
+  { name: 'Switzerland', dial: '+41' },
+  { name: 'Belgium', dial: '+32' }
+]
+
+export default COUNTRIES
