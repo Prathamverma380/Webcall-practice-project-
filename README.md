@@ -1,47 +1,61 @@
-# WebbCall - Starter
+# WebbCall - Practice Project
 
-This repository contains a starter Next.js 16 (App Router) + React 19 + TypeScript + Tailwind CSS project scaffold for a browser-based calling app like the provided mockup.
+A modern browser-based calling application built with Next.js 16, React 19, TypeScript, and Tailwind CSS.
 
-Features included in scaffold:
-- Next.js 16 (app router)
-- React 19 with hooks
-- TypeScript
-- Tailwind CSS + `globals.css`
-- `styled-components` for component-level styling
-- `react-icons` for icons
-- Placeholder Twilio Voice SDK integration point
-- Supabase client helper
-- Basic API route placeholder for Twilio token issuance
+## Features
 
-Getting started
+- 📞 **International Calling** - Make calls to 29+ countries
+- 💰 **Call Rates Display** - View competitive rates for each country
+- 🔐 **Authentication** - Sign in with Google, Twitter, or Email
+- 📦 **Pricing Packages** - Three-tier subscription model (Starter, Professional, Enterprise)
+- 🎨 **Modern UI** - Beautiful modals and responsive design
+- 🔗 **Supabase Integration** - Backend database and authentication
+- 🎚️ **Dial Pad** - Interactive phone dialer interface
 
-1. Install dependencies
+## Project Stack
+
+- **Frontend**: Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS
+- **Backend**: Supabase
+- **UI Components**: React Icons, Custom modals
+- **APIs**: Twilio Voice SDK integration point
+
+## Getting Started
+
+### 1. Install Dependencies
 
 ```bash
-cd "C:/Users/Pratham Verma/Desktop/Practice project/webcall-app"
 npm install
 ```
 
-2. Environment variables (add these to your Vercel/Supabase/Dev env):
+### 2. Environment Variables
 
-- `NEXT_PUBLIC_SUPABASE_URL` - your Supabase project URL
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY` - your Supabase anon/public key
-- `SUPABASE_SERVICE_ROLE_KEY` - (server-only) service role key if needed
-- `TWILIO_ACCOUNT_SID` - Twilio account SID
-- `TWILIO_API_KEY` - Twilio API Key SID
-- `TWILIO_API_SECRET` - Twilio API Key Secret
-- `TWILIO_PUSH_CREDENTIAL_SID` - (optional) for push credentials
-- `DODO_PUBLIC_KEY` - placeholder for payments
+Create a `.env.local` file with the following:
 
-3. Start dev server
+```bash
+NEXT_PUBLIC_SUPABASE_URL=https://azceqgokriujvrdttbzd.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=sb_publishable_haK7MD55e9KctE_JdE30AQ_qQE94yHJ
+```
+
+### 3. Run Development Server
 
 ```bash
 npm run dev
 ```
 
-Next steps I can do for you:
-- Implement Twilio token generation in `app/api/twilio/token/route.ts` once you provide Twilio credentials.
-- Wire the Twilio Voice SDK in the client to place real calls.
-- Add Supabase auth flows and database tables for call history and credits.
+Visit `http://localhost:3000` to see the app in action.
 
-Please provide your Supabase Project URL (or project id) and your Twilio credentials (Account SID and API Key SID + Secret), and I will implement the server token route and wire the client to make calls.
+## Features Implemented
+
+✅ **Rates Modal** - View call rates for all countries
+✅ **Sign In Modal** - OAuth integration with Google, Twitter, Email
+✅ **Packages Modal** - Browse pricing plans and packages
+✅ **Supabase Setup** - Connected backend database
+✅ **Responsive Design** - Mobile-friendly interface
+
+## Next Steps
+
+- Implement actual Twilio token generation
+- Add user authentication flows
+- Create call history and billing system
+- Implement payment processing
+>>>>>>> 56cac35c0d1e96e1dbc54cef8fe118baa9660fd4
