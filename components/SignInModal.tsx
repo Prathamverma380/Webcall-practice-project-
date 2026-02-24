@@ -1,7 +1,9 @@
 'use client'
 
-import { FiX, FiMail } from 'react-icons/fi'
+import { useState } from 'react'
+import { FiX, FiMail, FiArrowLeft } from 'react-icons/fi'
 import { FaGoogle, FaTwitter } from 'react-icons/fa'
+import { supabase } from '../lib/supabaseClient'
 
 interface SignInModalProps {
   isOpen: boolean
@@ -9,21 +11,79 @@ interface SignInModalProps {
 }
 
 export default function SignInModal({ isOpen, onClose }: SignInModalProps) {
+  const [showEmailForm, setShowEmailForm] = useState(false)
+  const [email, setEmail] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [message, setMessage] = useState<{ type: 'error' | 'success'; text: string } | null>(null)
+
   if (!isOpen) return null
 
-  const handleGoogleSignIn = () => {
-    // TODO: Implement Google OAuth
-    console.log('Google Sign In clicked')
+  const handleGoogleSignIn = async () => {
+    setLoading(true)
+    setMessage(null)
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: window.location.origin
+        }
+      })
+      if (error) throw error
+    } catch (err: any) {
+      setMessage({ type: 'error', text: err.message || 'Google sign in failed' })
+    } finally {
+      setLoading(false)
+    }
   }
 
-  const handleTwitterSignIn = () => {
-    // TODO: Implement Twitter OAuth
-    console.log('Twitter Sign In clicked')
+  const handleTwitterSignIn = async () => {
+    setLoading(true)
+    setMessage(null)
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'twitter',
+        options: {
+          redirectTo: window.location.origin
+        }
+      })
+      if (error) throw error
+    } catch (err: any) {
+      setMessage({ type: 'error', text: err.message || 'Twitter sign in failed' })
+    } finally {
+      setLoading(false)
+    }
   }
 
   const handleEmailSignIn = () => {
-    // TODO: Implement Email Sign In
-    console.log('Email Sign In clicked')
+    setShowEmailForm(true)
+    setMessage(null)
+  }
+
+  const handleEmailSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+    setMessage(null)
+
+    try {
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: {
+          emailRedirectTo: window.location.origin
+        }
+      })
+      if (error) throw error
+      setMessage({ type: 'success', text: 'Check your email for the magic link!' })
+    } catch (err: any) {
+      setMessage({ type: 'error', text: err.message || 'Failed to send magic link' })
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const resetForm = () => {
+    setShowEmailForm(false)
+    setEmail('')
+    setMessage(null)
   }
 
   return (
@@ -42,51 +102,105 @@ export default function SignInModal({ isOpen, onClose }: SignInModalProps) {
 
         {/* Content */}
         <div className="p-6 space-y-4">
-          <p className="text-slate-300 text-center mb-6">
-            Sign in to your WebbCall account to make international calls
-          </p>
+          {/* Message Display */}
+          {message && (
+            <div className={`p-3 rounded-lg text-sm ${message.type === 'error' ? 'bg-red-500/20 text-red-300' : 'bg-green-500/20 text-green-300'}`}>
+              {message.text}
+            </div>
+          )}
 
-          {/* Google Sign In */}
-          <button
-            onClick={handleGoogleSignIn}
-            className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-white hover:bg-slate-100 text-slate-900 rounded-lg font-medium transition border border-slate-300"
-          >
-            <FaGoogle size={20} />
-            <span>Continue with Google</span>
-          </button>
+          {!showEmailForm ? (
+            <>
+              <p className="text-slate-300 text-center mb-6">
+                Sign in to your WebbCall account to make international calls
+              </p>
 
-          {/* Twitter Sign In */}
-          <button
-            onClick={handleTwitterSignIn}
-            className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition"
-          >
-            <FaTwitter size={20} />
-            <span>Continue with Twitter</span>
-          </button>
+              {/* Google Sign In */}
+              <button
+                onClick={handleGoogleSignIn}
+                disabled={loading}
+                className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-white hover:bg-slate-100 text-slate-900 rounded-lg font-medium transition border border-slate-300 disabled:opacity-50"
+              >
+                <FaGoogle size={20} />
+                <span>{loading ? 'Connecting...' : 'Continue with Google'}</span>
+              </button>
 
-          {/* Email Sign In */}
-          <button
-            onClick={handleEmailSignIn}
-            className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-lg font-medium transition border border-slate-600"
-          >
-            <FiMail size={20} />
-            <span>Sign in with Email</span>
-          </button>
+              {/* Twitter Sign In */}
+              <button
+                onClick={handleTwitterSignIn}
+                disabled={loading}
+                className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition disabled:opacity-50"
+              >
+                <FaTwitter size={20} />
+                <span>{loading ? 'Connecting...' : 'Continue with Twitter'}</span>
+              </button>
 
-          {/* Divider */}
-          <div className="flex items-center gap-3 my-6">
-            <div className="flex-1 h-px bg-slate-700" />
-            <span className="text-xs text-slate-400">OR</span>
-            <div className="flex-1 h-px bg-slate-700" />
-          </div>
+              {/* Email Sign In */}
+              <button
+                onClick={handleEmailSignIn}
+                disabled={loading}
+                className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-lg font-medium transition border border-slate-600 disabled:opacity-50"
+              >
+                <FiMail size={20} />
+                <span>Sign in with Email</span>
+              </button>
 
-          {/* Sign Up Link */}
-          <p className="text-center text-sm text-slate-400">
-            Don't have an account?{' '}
-            <button className="text-cyan-400 hover:text-cyan-300 font-medium">
-              Sign up for free
-            </button>
-          </p>
+              {/* Divider */}
+              <div className="flex items-center gap-3 my-6">
+                <div className="flex-1 h-px bg-slate-700" />
+                <span className="text-xs text-slate-400">OR</span>
+                <div className="flex-1 h-px bg-slate-700" />
+              </div>
+
+              {/* Info Text */}
+              <p className="text-center text-sm text-slate-400">
+                No account needed - just sign in with any method above
+              </p>
+            </>
+          ) : (
+            <>
+              {/* Back Button */}
+              <button
+                onClick={resetForm}
+                className="flex items-center gap-2 text-slate-400 hover:text-white transition mb-4"
+              >
+                <FiArrowLeft size={18} />
+                <span>Back to options</span>
+              </button>
+
+              <h3 className="text-lg font-semibold text-white mb-2">
+                Sign in with Email
+              </h3>
+              <p className="text-sm text-slate-400 mb-4">
+                We'll send you a magic link to sign in instantly
+              </p>
+
+              <form onSubmit={handleEmailSubmit} className="space-y-4">
+                <div>
+                  <label className="block text-sm text-slate-400 mb-1">Email</label>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    className="w-full px-4 py-3 bg-slate-800 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-cyan-400"
+                    placeholder="you@example.com"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full px-4 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-lg font-medium hover:opacity-90 transition disabled:opacity-50"
+                >
+                  {loading ? 'Sending...' : 'Send Magic Link'}
+                </button>
+              </form>
+
+              <p className="text-center text-sm text-slate-400 mt-4">
+                No password needed - check your inbox for the link
+              </p>
+            </>
+          )}
         </div>
 
         {/* Footer */}

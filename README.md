@@ -54,8 +54,6 @@ Visit `http://localhost:3000` to see the app in action.
 
 ## Next Steps
 
-- Implement actual Twilio token generation
 - Add user authentication flows
 - Create call history and billing system
 - Implement payment processing
->>>>>>> 56cac35c0d1e96e1dbc54cef8fe118baa9660fd4
